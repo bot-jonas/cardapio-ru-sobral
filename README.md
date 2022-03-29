@@ -1,5 +1,5 @@
 # cardapio-ru-sobral
-Web scrapper do cardápio semanal do RU da UFC campus Sobral
+Web scrapper do cardápio semanal do RU da UFC campus Sobral utilizando Python 3
 
 ## Instalação
 ```bash
