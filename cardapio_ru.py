@@ -12,14 +12,14 @@ DAY = 24 * 60 * 60
 EVERYTHING = "(?:.|\n)*?"
 
 REGEX = {
-    "table": f"<table (?:.*?)>({EVERYTHING})</table>",
-    "rows": f"<tr (?:.*?)>({EVERYTHING})</tr>",
-    "cols": f"<td (?:.*?)>({EVERYTHING})</td>",
+    "table": f"<table(?:.*?)>({EVERYTHING})</table>",
+    "rows": f"<tr(?:.*?)>({EVERYTHING})</tr>",
+    "cols": f"<td(?:.*?)>({EVERYTHING})</td>",
 }
 
 
 def get_text(html_str):
-    return re.sub("</?(?:.*?)/?>", "", html_str)
+    return re.sub("</?(?:.*?)/?>|&nbsp;", "", html_str).strip()
 
 
 def parse_table(table_text):
