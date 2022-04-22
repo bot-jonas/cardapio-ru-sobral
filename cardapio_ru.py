@@ -33,18 +33,28 @@ def parse_table(table_text):
 
     return table
 
+def get_data():
+    r = requests.get("https://sobral.ufc.br/ru/cardapio/", expire_after=DAY)
+    title = get_text(re.findall(f'<h1 class="entry-title">({EVERYTHING})</h1>', r.text)[0])
 
-r = requests.get("https://sobral.ufc.br/ru/cardapio/", expire_after=DAY)
-title = re.findall(f'<h1 class="entry-title">({EVERYTHING})</h1>', r.text)[0]
+    [lunch_match, dinner_match] = islice(re.finditer(REGEX["table"], r.text), 2)
 
-print(get_text(title))
+    lunch_table = parse_table(lunch_match.group(0))
+    dinner_table = parse_table(dinner_match.group(0))
 
-[lunch_match, dinner_match] = islice(re.finditer(REGEX["table"], r.text), 2)
+    return title, lunch_table, dinner_table
 
-lunch_table = parse_table(lunch_match.group(0))
-dinner_table = parse_table(dinner_match.group(0))
 
-print(tabulate(lunch_table[1:], lunch_table[0], tablefmt="fancy_grid"))
-print(tabulate(dinner_table[1:], dinner_table[0], tablefmt="fancy_grid"))
+def main():
+    title, lunch_table, dinner_table = get_data()
 
-print("*Contém LACTOSE\n**Contém GLÚTEN")
+    print(title)
+
+    print(tabulate(lunch_table[1:], lunch_table[0], tablefmt="fancy_grid"))
+    print(tabulate(dinner_table[1:], dinner_table[0], tablefmt="fancy_grid"))
+
+    print("*Contém LACTOSE\n**Contém GLÚTEN")
+
+
+if __name__ == "__main__":
+    main()
